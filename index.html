@@ -1,438 +1,438 @@
-!DOCTYPE html
-html lang=es
-head
-    meta charset=UTF-8
-    meta name=viewport content=width=device-width, initial-scale=1.0
-    titleUAS-Digital Análisis de Caso y Taller ADDIEtitle
-    script src=httpscdn.tailwindcss.comscript
-    script src=httpscdn.jsdelivr.netnpmchart.jsscript
-    style
-         Tipografía 
-        @import url('httpsfonts.googleapis.comcss2family=Interwght@300;400;500;600;700&display=swap');
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UAS-Digital: Análisis de Caso y Taller ADDIE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Tipografía */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body {
-            font-family 'Inter', sans-serif;
-            background-color #FAFAF9;  bg-stone-50 
-            color #1E293B;  text-slate-800 
+            font-family: 'Inter', sans-serif;
+            background-color: #FAFAF9; /* bg-stone-50 */
+            color: #1E293B; /* text-slate-800 */
         }
 
-         Estilos de Navegación 
+        /* Estilos de Navegación */
         .nav-item.active {
-            background-color #E2E8F0;  bg-slate-200 
-            border-left 4px solid #0F172A;  border-slate-900 
-            font-weight 600;
+            background-color: #E2E8F0; /* bg-slate-200 */
+            border-left: 4px solid #0F172A; /* border-slate-900 */
+            font-weight: 600;
         }
 
-         !-- Contenedores de Gráficos Requeridos -- 
+        /* <!-- Contenedores de Gráficos Requeridos --> */
         .chart-container {
-            position relative;
-            width 100%;
-            max-width 800px; 
-            margin-left auto;
-            margin-right auto;
-            height 350px;
-            max-height 400px;
+            position: relative;
+            width: 100%;
+            max-width: 800px; 
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
         }
-        @media (max-width 768px) {
+        @media (max-width: 768px) {
             .chart-container {
-                height 280px;
-                max-height 300px;
+                height: 280px;
+                max-height: 300px;
             }
         }
 
-         Ocultar secciones no activas 
+        /* Ocultar secciones no activas */
         .view-section {
-            display none;
-            animation fadeIn 0.4s ease-in-out;
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
         }
         .view-section.active {
-            display block;
+            display: block;
         }
 
         @keyframes fadeIn {
-            from { opacity 0; transform translateY(10px); }
-            to { opacity 1; transform translateY(0); }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-         Scrollbar personalizado 
-        -webkit-scrollbar {
-            width 8px;
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        -webkit-scrollbar-track {
-            background #f1f1f1; 
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
         }
-        -webkit-scrollbar-thumb {
-            background #cbd5e1; 
-            border-radius 4px;
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
         }
-        -webkit-scrollbar-thumbhover {
-            background #94a3b8; 
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
         }
-    style
-head
-body class=flex h-screen overflow-hidden antialiased
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased">
 
-    !-- Chosen Palette Warm Neutrals & Deep Slate (Stone-50 background, Slate-800900 text and accents, AmberGold subtle highlights for critical data). --
+    <!-- Chosen Palette: Warm Neutrals & Deep Slate (Stone-50 background, Slate-800/900 text and accents, Amber/Gold subtle highlights for critical data). -->
     
-    !-- Application Structure Plan 
-    El SPA utiliza un diseño de Dashboard interactivo con una barra de navegación lateral (o superior en móviles).
-    Esta estructura se eligió porque permite a los estudiantes de maestría explorar un caso complejo (UAS-Digital) de forma no lineal.
-    - Secciones
-        1. Resumen Institucional Contextualiza el problema y las restricciones (presupuesto, perfil).
-        2. Dashboard de Datos Presenta la evidencia cruda (Learning Analytics) mediante gráficos interactivos para que los estudiantes descubran los problemas (ruido en los datos).
-        3. Taller y Consigna Integra la teoría (ADDIE) con la práctica, asignando roles (incluyendo IA) para resolver el caso.
+    <!-- Application Structure Plan: 
+    El SPA utiliza un diseño de "Dashboard interactivo" con una barra de navegación lateral (o superior en móviles).
+    Esta estructura se eligió porque permite a los estudiantes de maestría explorar un caso complejo ("UAS-Digital") de forma no lineal.
+    - Secciones:
+        1. Resumen Institucional: Contextualiza el problema y las restricciones (presupuesto, perfil).
+        2. Dashboard de Datos: Presenta la "evidencia cruda" (Learning Analytics) mediante gráficos interactivos para que los estudiantes descubran los problemas (ruido en los datos).
+        3. Taller y Consigna: Integra la teoría (ADDIE) con la práctica, asignando roles (incluyendo IA) para resolver el caso.
     Esta arquitectura separa la ingesta de información (lectura), el análisis de evidencia (interacción con datos) y la aplicación (taller), reduciendo la carga cognitiva. 
-    --
+    -->
 
-    !-- Visualization & Content Choices 
-    - Participación Semanal - Objetivo Mostrar tendencia de caída y el cuello de botella - Chart.js Line Chart - Interactivo para ver valores exactos - Justificación Los estudiantes deben notar la caída brusca en la semana 3 (foro).
-    - Retención de Video - Objetivo Mostrar ineficacia del material actual - Chart.js Area Chart - Justificación Visualiza claramente cómo la atención se desploma a los 5 minutos.
-    - KPI Cards (Abandono, Calificación) - Objetivo Resumen rápido - Texto HTMLCSS destacado - Justificación Datos clave necesitan estar siempre visibles.
-    - Testimonios Cualitativos - Objetivo Humanizar los datos - Tarjetas interactivas (hover) HTMLCSS - Justificación Crucial para entender el contexto ruralmóvil más allá de los números.
-    --
+    <!-- Visualization & Content Choices: 
+    - Participación Semanal -> Objetivo: Mostrar tendencia de caída y el "cuello de botella" -> Chart.js Line Chart -> Interactivo para ver valores exactos -> Justificación: Los estudiantes deben notar la caída brusca en la semana 3 (foro).
+    - Retención de Video -> Objetivo: Mostrar ineficacia del material actual -> Chart.js Area Chart -> Justificación: Visualiza claramente cómo la atención se desploma a los 5 minutos.
+    - KPI Cards (Abandono, Calificación) -> Objetivo: Resumen rápido -> Texto HTML/CSS destacado -> Justificación: Datos clave necesitan estar siempre visibles.
+    - Testimonios Cualitativos -> Objetivo: Humanizar los datos -> Tarjetas interactivas (hover) HTML/CSS -> Justificación: Crucial para entender el contexto rural/móvil más allá de los números.
+    -->
 
-    !-- CONFIRMATION NO SVG graphics used. NO Mermaid JS used. Se emplean caracteres Unicode para la iconografía y Chart.js sobre canvas. --
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. Se emplean caracteres Unicode para la iconografía y Chart.js sobre canvas. -->
 
-    !-- Sidebar Navigation --
-    aside class=w-64 bg-white border-r border-slate-200 flex flex-col justify-between hidden mdflex z-10 shrink-0
-        div
-            div class=p-6 border-b border-slate-100
-                h1 class=text-xl font-bold text-slate-900 leading-tightUAS-Digitalh1
-                p class=text-xs text-slate-500 mt-1Análisis de Caso (Nivel Maestría)p
-            div
-            nav class=p-4 space-y-2 id=desktop-nav
-                button data-target=view-dashboard class=nav-item active w-full text-left px-4 py-3 rounded-md text-sm text-slate-700 hoverbg-slate-50 transition-colors
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between hidden md:flex z-10 shrink-0">
+        <div>
+            <div class="p-6 border-b border-slate-100">
+                <h1 class="text-xl font-bold text-slate-900 leading-tight">UAS-Digital</h1>
+                <p class="text-xs text-slate-500 mt-1">Análisis de Caso (Nivel Maestría)</p>
+            </div>
+            <nav class="p-4 space-y-2" id="desktop-nav">
+                <button data-target="view-dashboard" class="nav-item active w-full text-left px-4 py-3 rounded-md text-sm text-slate-700 hover:bg-slate-50 transition-colors">
                     &#128202; Analítica del Aprendizaje
-                button
-                button data-target=view-context class=nav-item w-full text-left px-4 py-3 rounded-md text-sm text-slate-700 hoverbg-slate-50 transition-colors
+                </button>
+                <button data-target="view-context" class="nav-item w-full text-left px-4 py-3 rounded-md text-sm text-slate-700 hover:bg-slate-50 transition-colors">
                     &#127970; Contexto y Perfil
-                button
-                button data-target=view-workshop class=nav-item w-full text-left px-4 py-3 rounded-md text-sm text-slate-700 hoverbg-slate-50 transition-colors
+                </button>
+                <button data-target="view-workshop" class="nav-item w-full text-left px-4 py-3 rounded-md text-sm text-slate-700 hover:bg-slate-50 transition-colors">
                     &#9881;&#65039; Consigna del Taller
-                button
-                button data-target=view-addie class=nav-item w-full text-left px-4 py-3 rounded-md text-sm text-slate-700 hoverbg-slate-50 transition-colors
-                    &#128218; Referencia ADDIE
-                button
-            nav
-        div
-        div class=p-6 text-xs text-slate-400 border-t border-slate-100
-            Sesión 4 Diseño Instruccional
-        div
-    aside
+                </button>
+                <button data-target="view-addie" class="nav-item w-full text-left px-4 py-3 rounded-md text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                    &#128218; Referencia: ADDIE
+                </button>
+            </nav>
+        </div>
+        <div class="p-6 text-xs text-slate-400 border-t border-slate-100">
+            Sesión 4: Diseño Instruccional
+        </div>
+    </aside>
 
-    !-- Mobile Navigation (Top) --
-    header class=mdhidden bg-white border-b border-slate-200 p-4 flex justify-between items-center z-20 absolute top-0 w-full
-        h1 class=text-lg font-bold text-slate-900UAS-Digitalh1
-        select id=mobile-nav class=bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focusring-slate-500 focusborder-slate-500 block p-2
-            option value=view-dashboardAnalítica de Datosoption
-            option value=view-contextContexto y Perfiloption
-            option value=view-workshopConsigna del Talleroption
-            option value=view-addieRef ADDIEoption
-        select
-    header
+    <!-- Mobile Navigation (Top) -->
+    <header class="md:hidden bg-white border-b border-slate-200 p-4 flex justify-between items-center z-20 absolute top-0 w-full">
+        <h1 class="text-lg font-bold text-slate-900">UAS-Digital</h1>
+        <select id="mobile-nav" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-slate-500 focus:border-slate-500 block p-2">
+            <option value="view-dashboard">Analítica de Datos</option>
+            <option value="view-context">Contexto y Perfil</option>
+            <option value="view-workshop">Consigna del Taller</option>
+            <option value="view-addie">Ref: ADDIE</option>
+        </select>
+    </header>
 
-    !-- Main Content Area --
-    main class=flex-1 overflow-y-auto bg-stone-50 mdmt-0 mt-[73px]
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto bg-stone-50 md:mt-0 mt-[73px]">
         
-        !-- ==================== VIEW 1 DASHBOARD DE DATOS ==================== --
-        section id=view-dashboard class=view-section active p-6 lgp-10 max-w-6xl mx-auto
-            div class=mb-8
-                h2 class=text-3xl font-bold text-slate-900Dashboard de Analítica (Semana 1-6)h2
-                p class=text-slate-600 mt-2Explora los datos crudos del módulo strongMetodología de la Investigación Istrong. El equipo directivo necesita que identifiques el cuello de botella real de la deserción.p
-            div
+        <!-- ==================== VIEW 1: DASHBOARD DE DATOS ==================== -->
+        <section id="view-dashboard" class="view-section active p-6 lg:p-10 max-w-6xl mx-auto">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-900">Dashboard de Analítica (Semana 1-6)</h2>
+                <p class="text-slate-600 mt-2">Explora los datos crudos del módulo <strong>Metodología de la Investigación I</strong>. El equipo directivo necesita que identifiques el cuello de botella real de la deserción.</p>
+            </div>
 
-            !-- KPIs --
-            div class=grid grid-cols-1 mdgrid-cols-2 lggrid-cols-4 gap-4 mb-8
-                div class=bg-white p-5 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-red-500
-                    div class=text-sm text-slate-500 mb-1Tasa de Abandono Finaldiv
-                    div class=text-3xl font-bold text-slate-80047%div
-                    div class=text-xs text-red-500 mt-1&#8593; Crítico (Antes semana 6)div
-                div
-                div class=bg-white p-5 rounded-xl shadow-sm border border-slate-100
-                    div class=text-sm text-slate-500 mb-1Calificación Mediadiv
-                    div class=text-3xl font-bold text-slate-8005.8span class=text-lg text-slate-40010spandiv
-                    div class=text-xs text-slate-500 mt-1Mínimo aprobatorio 6.0div
-                div
-                div class=bg-white p-5 rounded-xl shadow-sm border border-slate-100
-                    div class=text-sm text-slate-500 mb-1Interacción entre Paresdiv
-                    div class=text-3xl font-bold text-slate-80018%div
-                    div class=text-xs text-amber-500 mt-1&#9888;&#65039; Aprendizaje muy aisladodiv
-                div
-                div class=bg-white p-5 rounded-xl shadow-sm border border-slate-100
-                    div class=text-sm text-slate-500 mb-1Reintentos en Forodiv
-                    div class=text-3xl font-bold text-slate-8002.1xdiv
-                    div class=text-xs text-slate-500 mt-1Intentos antes de validezdiv
-                div
-            div
+            <!-- KPIs -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-red-500">
+                    <div class="text-sm text-slate-500 mb-1">Tasa de Abandono Final</div>
+                    <div class="text-3xl font-bold text-slate-800">47%</div>
+                    <div class="text-xs text-red-500 mt-1">&#8593; Crítico (Antes semana 6)</div>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100">
+                    <div class="text-sm text-slate-500 mb-1">Calificación Media</div>
+                    <div class="text-3xl font-bold text-slate-800">5.8<span class="text-lg text-slate-400">/10</span></div>
+                    <div class="text-xs text-slate-500 mt-1">Mínimo aprobatorio: 6.0</div>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100">
+                    <div class="text-sm text-slate-500 mb-1">Interacción entre Pares</div>
+                    <div class="text-3xl font-bold text-slate-800">18%</div>
+                    <div class="text-xs text-amber-500 mt-1">&#9888;&#65039; Aprendizaje muy aislado</div>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100">
+                    <div class="text-sm text-slate-500 mb-1">Reintentos en Foro</div>
+                    <div class="text-3xl font-bold text-slate-800">2.1x</div>
+                    <div class="text-xs text-slate-500 mt-1">Intentos antes de validez</div>
+                </div>
+            </div>
 
-            !-- Gráficos Interactivos --
-            div class=grid grid-cols-1 lggrid-cols-2 gap-8 mb-8
-                !-- Gráfico 1 Logins --
-                div class=bg-white p-6 rounded-xl shadow-sm border border-slate-100
-                    h3 class=text-lg font-semibold text-slate-800 mb-1Logins Únicos por Semana (LMS)h3
-                    p class=text-xs text-slate-500 mb-4Porcentaje de la cohorte que accede a la plataforma.p
-                    div class=chart-container
-                        canvas id=loginsChartcanvas
-                    div
-                    div class=mt-4 p-3 bg-slate-50 rounded text-sm text-slate-700 border border-slate-200
-                        strongPista para analistasstrong ¿Qué ocurre en la semana 3 que causa una caída tan drástica frente a la semana 2
-                    div
-                div
+            <!-- Gráficos Interactivos -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Gráfico 1: Logins -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-1">Logins Únicos por Semana (LMS)</h3>
+                    <p class="text-xs text-slate-500 mb-4">Porcentaje de la cohorte que accede a la plataforma.</p>
+                    <div class="chart-container">
+                        <canvas id="loginsChart"></canvas>
+                    </div>
+                    <div class="mt-4 p-3 bg-slate-50 rounded text-sm text-slate-700 border border-slate-200">
+                        <strong>Pista para analistas:</strong> ¿Qué ocurre en la semana 3 que causa una caída tan drástica frente a la semana 2?
+                    </div>
+                </div>
 
-                !-- Gráfico 2 Retención de Video --
-                div class=bg-white p-6 rounded-xl shadow-sm border border-slate-100
-                    h3 class=text-lg font-semibold text-slate-800 mb-1Mapa de Retención de Videoh3
-                    p class=text-xs text-slate-500 mb-4Análisis de las video-clases asincrónicas (Grabadas 2021, duración 45m).p
-                    div class=chart-container
-                        canvas id=videoChartcanvas
-                    div
-                    div class=mt-4 p-3 bg-slate-50 rounded text-sm text-slate-700 border border-slate-200
-                        strongImpacto Cognitivostrong Los estudiantes abandonan el material clave antes de llegar a las instrucciones evaluativas.
-                    div
-                div
-            div
+                <!-- Gráfico 2: Retención de Video -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-1">Mapa de Retención de Video</h3>
+                    <p class="text-xs text-slate-500 mb-4">Análisis de las video-clases asincrónicas (Grabadas 2021, duración 45m).</p>
+                    <div class="chart-container">
+                        <canvas id="videoChart"></canvas>
+                    </div>
+                    <div class="mt-4 p-3 bg-slate-50 rounded text-sm text-slate-700 border border-slate-200">
+                        <strong>Impacto Cognitivo:</strong> Los estudiantes abandonan el material clave antes de llegar a las instrucciones evaluativas.
+                    </div>
+                </div>
+            </div>
 
-            !-- Feedback Cualitativo --
-            div class=bg-white p-6 rounded-xl shadow-sm border border-slate-100
-                h3 class=text-lg font-semibold text-slate-800 mb-4Análisis de Sentimientos Citas de Desertoresh3
-                div class=grid grid-cols-1 mdgrid-cols-3 gap-4
-                    div class=p-4 bg-stone-50 rounded-lg border-l-4 border-l-slate-400 hovershadow-md transition-shadow
-                        p class=text-sm italic text-slate-600Leía el PDF en el bus desde mi celular, pero cuando intentaba responder el foro la plataforma se colgaba y perdía lo escrito.p
-                        p class=text-xs font-semibold text-slate-800 mt-2— Estudiante A (Zonal Rural)p
-                    div
-                    div class=p-4 bg-stone-50 rounded-lg border-l-4 border-l-slate-400 hovershadow-md transition-shadow
-                        p class=text-sm italic text-slate-600No entendía qué pedía la tarea 1. Escribí al profesor un martes y me contestó el domingo, cuando la entrega ya había cerrado.p
-                        p class=text-xs font-semibold text-slate-800 mt-2— Estudiante B (Trabaja turno nocturno)p
-                    div
-                    div class=p-4 bg-stone-50 rounded-lg border-l-4 border-l-slate-400 hovershadow-md transition-shadow
-                        p class=text-sm italic text-slate-600Los videos son de hace 3 años, el profesor habla de entregar algo 'mañana en clase' y me confunde. Me sentí completamente solo en el curso.p
-                        p class=text-xs font-semibold text-slate-800 mt-2— Estudiante Cp
-                    div
-                div
-            div
-        section
+            <!-- Feedback Cualitativo -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                <h3 class="text-lg font-semibold text-slate-800 mb-4">Análisis de Sentimientos: Citas de Desertores</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-4 bg-stone-50 rounded-lg border-l-4 border-l-slate-400 hover:shadow-md transition-shadow">
+                        <p class="text-sm italic text-slate-600">"Leía el PDF en el bus desde mi celular, pero cuando intentaba responder el foro la plataforma se colgaba y perdía lo escrito."</p>
+                        <p class="text-xs font-semibold text-slate-800 mt-2">— Estudiante A (Zonal Rural)</p>
+                    </div>
+                    <div class="p-4 bg-stone-50 rounded-lg border-l-4 border-l-slate-400 hover:shadow-md transition-shadow">
+                        <p class="text-sm italic text-slate-600">"No entendía qué pedía la tarea 1. Escribí al profesor un martes y me contestó el domingo, cuando la entrega ya había cerrado."</p>
+                        <p class="text-xs font-semibold text-slate-800 mt-2">— Estudiante B (Trabaja turno nocturno)</p>
+                    </div>
+                    <div class="p-4 bg-stone-50 rounded-lg border-l-4 border-l-slate-400 hover:shadow-md transition-shadow">
+                        <p class="text-sm italic text-slate-600">"Los videos son de hace 3 años, el profesor habla de entregar algo 'mañana en clase' y me confunde. Me sentí completamente solo en el curso."</p>
+                        <p class="text-xs font-semibold text-slate-800 mt-2">— Estudiante C</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        !-- ==================== VIEW 2 CONTEXTO INSTITUCIONAL ==================== --
-        section id=view-context class=view-section p-6 lgp-10 max-w-5xl mx-auto
-            div class=mb-8
-                h2 class=text-3xl font-bold text-slate-900Contexto y Perfil de UAS-Digitalh2
-                p class=text-slate-600 mt-2Antes de diseñar, debemos comprender para quién diseñamos y bajo qué restricciones tecnológicas y financieras operamos.p
-            div
+        <!-- ==================== VIEW 2: CONTEXTO INSTITUCIONAL ==================== -->
+        <section id="view-context" class="view-section p-6 lg:p-10 max-w-5xl mx-auto">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-900">Contexto y Perfil de UAS-Digital</h2>
+                <p class="text-slate-600 mt-2">Antes de diseñar, debemos comprender para quién diseñamos y bajo qué restricciones tecnológicas y financieras operamos.</p>
+            </div>
 
-            div class=grid grid-cols-1 mdgrid-cols-2 gap-8
-                !-- Perfil del Estudiante --
-                div class=bg-white p-8 rounded-xl shadow-sm border border-slate-100
-                    div class=text-4xl mb-4&#128104;&#8205;&#128187;div
-                    h3 class=text-xl font-bold text-slate-800 mb-4Perfil del Estudianteh3
-                    ul class=space-y-3
-                        li class=flex items-start
-                            span class=text-slate-400 mr-2&#10003;span
-                            span class=text-slate-700strongEdad promediostrong 28 años. El 70% trabaja a tiempo completo.span
-                        li
-                        li class=flex items-start
-                            span class=text-slate-400 mr-2&#10003;span
-                            span class=text-slate-700strongDispositivo principalstrong Acceso mayoritariamente desde teléfono móvil.span
-                        li
-                        li class=flex items-start
-                            span class=text-slate-400 mr-2&#10003;span
-                            span class=text-slate-700strongConectividadstrong Intermitente. 30% reside en zonas rurales.span
-                        li
-                        li class=flex items-start
-                            span class=text-slate-400 mr-2&#10003;span
-                            span class=text-slate-700strongBackgroundstrong Primera generación universitaria en muchos casos. Alta motivación al inicio que decae rápidamente.span
-                        li
-                    ul
-                div
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Perfil del Estudiante -->
+                <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
+                    <div class="text-4xl mb-4">&#128104;&#8205;&#128187;</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4">Perfil del Estudiante</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <span class="text-slate-400 mr-2">&#10003;</span>
+                            <span class="text-slate-700"><strong>Edad promedio:</strong> 28 años. El 70% trabaja a tiempo completo.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-slate-400 mr-2">&#10003;</span>
+                            <span class="text-slate-700"><strong>Dispositivo principal:</strong> Acceso mayoritariamente desde teléfono móvil.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-slate-400 mr-2">&#10003;</span>
+                            <span class="text-slate-700"><strong>Conectividad:</strong> Intermitente. 30% reside en zonas rurales.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-slate-400 mr-2">&#10003;</span>
+                            <span class="text-slate-700"><strong>Background:</strong> Primera generación universitaria en muchos casos. Alta motivación al inicio que decae rápidamente.</span>
+                        </li>
+                    </ul>
+                </div>
 
-                !-- Contexto Institucional --
-                div class=bg-white p-8 rounded-xl shadow-sm border border-slate-100
-                    div class=text-4xl mb-4&#127970;div
-                    h3 class=text-xl font-bold text-slate-800 mb-4Ecosistema y Restriccionesh3
-                    ul class=space-y-3
-                        li class=flex items-start
-                            span class=text-amber-500 mr-2&#9888;&#65039;span
-                            span class=text-slate-700strongLMS Moodlestrong Subutilizado, sin módulos analíticos avanzados activados por defecto.span
-                        li
-                        li class=flex items-start
-                            span class=text-amber-500 mr-2&#9888;&#65039;span
-                            span class=text-slate-700strongSobrecarga Docentestrong Ratio de 1 tutor por cada 80 estudiantes (180). Tiempos de respuesta lentos.span
-                        li
-                        li class=flex items-start
-                            span class=text-amber-500 mr-2&#9888;&#65039;span
-                            span class=text-slate-700strongContenidos obsoletosstrong Dominan los PDFs extensos y videos reciclados del 2021. Evaluación puramente sumativa (examen final).span
-                        li
-                        li class=flex items-start
-                            span class=text-red-500 mr-2&#10007;span
-                            span class=text-slate-700strongPresupuesto CEROstrong emLa universidad no tiene presupuesto para comprar un nuevo LMS. Deben solucionar el problema dentro de Moodle y con herramientas gratuitasOpen Source.emspan
-                        li
-                    ul
-                div
-            div
+                <!-- Contexto Institucional -->
+                <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
+                    <div class="text-4xl mb-4">&#127970;</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4">Ecosistema y Restricciones</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <span class="text-amber-500 mr-2">&#9888;&#65039;</span>
+                            <span class="text-slate-700"><strong>LMS Moodle:</strong> Subutilizado, sin módulos analíticos avanzados activados por defecto.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-amber-500 mr-2">&#9888;&#65039;</span>
+                            <span class="text-slate-700"><strong>Sobrecarga Docente:</strong> Ratio de 1 tutor por cada 80 estudiantes (1:80). Tiempos de respuesta lentos.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-amber-500 mr-2">&#9888;&#65039;</span>
+                            <span class="text-slate-700"><strong>Contenidos obsoletos:</strong> Dominan los PDFs extensos y videos reciclados del 2021. Evaluación puramente sumativa (examen final).</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-red-500 mr-2">&#10007;</span>
+                            <span class="text-slate-700"><strong>Presupuesto CERO:</strong> <em>"La universidad no tiene presupuesto para comprar un nuevo LMS. Deben solucionar el problema dentro de Moodle y con herramientas gratuitas/Open Source."</em></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
-            div class=mt-8 bg-slate-900 rounded-xl p-6 text-white shadow-md
-                h3 class=text-lg font-bold mb-2 flex items-center&#129302; El Dilema de la Inteligencia Artificialh3
-                p class=text-slate-300 text-sm mb-4
-                    El rector de la UAS-Digital ha propuesto implementar un strongChatbot con Inteligencia Artificialstrong para reducir la sobrecarga de los tutores (ratio 180). Sin embargo, considerando que el 30% de alumnos tiene mala conexión, acceden por celular y se sienten frustrados por fallas técnicas...
-                p
-                div class=p-3 bg-slate-800 rounded border border-slate-700 text-sm
-                    strongPregunta de debatestrong ¿Recomiendan implementar esta IA en este momento Si es así, ¿cómo Si no, ¿qué solución de baja tecnología basada en analítica proponen
-                div
-            div
-        section
+            <div class="mt-8 bg-slate-900 rounded-xl p-6 text-white shadow-md">
+                <h3 class="text-lg font-bold mb-2 flex items-center">&#129302; El Dilema de la Inteligencia Artificial</h3>
+                <p class="text-slate-300 text-sm mb-4">
+                    El rector de la UAS-Digital ha propuesto implementar un <strong>Chatbot con Inteligencia Artificial</strong> para reducir la sobrecarga de los tutores (ratio 1:80). Sin embargo, considerando que el 30% de alumnos tiene mala conexión, acceden por celular y se sienten frustrados por fallas técnicas...
+                </p>
+                <div class="p-3 bg-slate-800 rounded border border-slate-700 text-sm">
+                    <strong>Pregunta de debate:</strong> ¿Recomiendan implementar esta IA en este momento? Si es así, ¿cómo? Si no, ¿qué solución de baja tecnología basada en analítica proponen?
+                </div>
+            </div>
+        </section>
 
-        !-- ==================== VIEW 3 TALLER Y CONSIGNA ==================== --
-        section id=view-workshop class=view-section p-6 lgp-10 max-w-5xl mx-auto
-            div class=mb-8
-                h2 class=text-3xl font-bold text-slate-900Consigna del Taller Prácticoh2
-                p class=text-slate-600 mt-2Trabajo en grupos. El objetivo es proponer una solución instruccional integral al caso UAS-Digital utilizando el modelo ADDIE, justificando las decisiones con la evidencia analítica analizada.p
-            div
+        <!-- ==================== VIEW 3: TALLER Y CONSIGNA ==================== -->
+        <section id="view-workshop" class="view-section p-6 lg:p-10 max-w-5xl mx-auto">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-900">Consigna del Taller Práctico</h2>
+                <p class="text-slate-600 mt-2">Trabajo en grupos. El objetivo es proponer una solución instruccional integral al caso UAS-Digital utilizando el modelo ADDIE, justificando las decisiones con la evidencia analítica analizada.</p>
+            </div>
 
-            !-- Roles --
-            div class=bg-amber-50 border border-amber-200 rounded-xl p-6 mb-8 shadow-sm
-                h3 class=text-lg font-bold text-amber-900 mb-3&#128101; Formación de Equipos y Rolesh3
-                p class=text-amber-800 text-sm mb-4Conformen grupos heterogéneos y asuman los siguientes roles para asegurar una solución sistémicap
+            <!-- Roles -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-8 shadow-sm">
+                <h3 class="text-lg font-bold text-amber-900 mb-3">&#128101; Formación de Equipos y Roles</h3>
+                <p class="text-amber-800 text-sm mb-4">Conformen grupos heterogéneos y asuman los siguientes roles para asegurar una solución sistémica:</p>
                 
-                div class=grid grid-cols-1 mdgrid-cols-3 gap-4
-                    div class=bg-white p-4 rounded border border-amber-100
-                        div class=font-bold text-slate-800 text-sm mb-1&#128218; El Pedagogo  Estrategadiv
-                        p class=text-xs text-slate-600Garantiza que los objetivos (Taxonomía de Bloom) se alineen con la evaluación. Asegura que el diseño tenga sentido para el adulto trabajador rural.p
-                    div
-                    div class=bg-white p-4 rounded border border-amber-100
-                        div class=font-bold text-slate-800 text-sm mb-1&#128200; El Analista de Datosdiv
-                        p class=text-xs text-slate-600Define qué métricas vigilar dentro del Moodle (ej. accesos, tiempo). Establece umbrales de alerta y propone qué decisión tomar si el dato cae.p
-                    div
-                    div class=bg-white p-4 rounded border border-amber-100
-                        div class=font-bold text-slate-800 text-sm mb-1&#129302; El Ing. de Prompts (IA)div
-                        p class=text-xs text-slate-600Utiliza IA Generativa (ChatGPT, Gemini) en tiempo real para acelerar el desarrollo crear ideas de actividades asíncronas o redactar rúbricas en minutos.p
-                    div
-                div
-            div
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white p-4 rounded border border-amber-100">
+                        <div class="font-bold text-slate-800 text-sm mb-1">&#128218; El Pedagogo / Estratega</div>
+                        <p class="text-xs text-slate-600">Garantiza que los objetivos (Taxonomía de Bloom) se alineen con la evaluación. Asegura que el diseño tenga sentido para el adulto trabajador rural.</p>
+                    </div>
+                    <div class="bg-white p-4 rounded border border-amber-100">
+                        <div class="font-bold text-slate-800 text-sm mb-1">&#128200; El Analista de Datos</div>
+                        <p class="text-xs text-slate-600">Define qué métricas vigilar dentro del Moodle (ej. accesos, tiempo). Establece umbrales de alerta y propone qué decisión tomar si el dato cae.</p>
+                    </div>
+                    <div class="bg-white p-4 rounded border border-amber-100">
+                        <div class="font-bold text-slate-800 text-sm mb-1">&#129302; El Ing. de Prompts (IA)</div>
+                        <p class="text-xs text-slate-600">Utiliza IA Generativa (ChatGPT, Gemini) en tiempo real para acelerar el desarrollo: crear ideas de actividades asíncronas o redactar rúbricas en minutos.</p>
+                    </div>
+                </div>
+            </div>
 
-            !-- Pasos --
-            div class=space-y-6
-                div class=flex
-                    div class=flex-shrink-0 mr-4
-                        div class=w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-lg0div
-                    div
-                    div
-                        h4 class=text-xl font-bold text-slate-800Diagnóstico Crítico (Analítica)h4
-                        p class=text-slate-600 text-sm mt-1Identifiquen el cuello de botella crítico usando los datos provistos en el dashboard. ¿Dónde exactamente se pierden los estudiantes y por quép
-                    div
-                div
+            <!-- Pasos -->
+            <div class="space-y-6">
+                <div class="flex">
+                    <div class="flex-shrink-0 mr-4">
+                        <div class="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-lg">0</div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-slate-800">Diagnóstico Crítico (Analítica)</h4>
+                        <p class="text-slate-600 text-sm mt-1">Identifiquen el cuello de botella crítico usando los datos provistos en el dashboard. ¿Dónde exactamente se pierden los estudiantes y por qué?</p>
+                    </div>
+                </div>
 
-                div class=flex
-                    div class=flex-shrink-0 mr-4
-                        div class=w-10 h-10 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-lg border border-slate-3001div
-                    div
-                    div
-                        h4 class=text-xl font-bold text-slate-800Diseño del Móduloh4
-                        p class=text-slate-600 text-sm mt-1Propongan 3 objetivos de aprendizaje medibles y diseñen strongestrategias asíncronas de bajo ancho de bandastrong para 4 semanas. Reemplacen los videos ineficaces de 45 min y los foros rotos.p
-                    div
-                div
+                <div class="flex">
+                    <div class="flex-shrink-0 mr-4">
+                        <div class="w-10 h-10 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-lg border border-slate-300">1</div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-slate-800">Diseño del Módulo</h4>
+                        <p class="text-slate-600 text-sm mt-1">Propongan 3 objetivos de aprendizaje medibles y diseñen <strong>estrategias asíncronas de bajo ancho de banda</strong> para 4 semanas. Reemplacen los videos ineficaces de 45 min y los foros rotos.</p>
+                    </div>
+                </div>
 
-                div class=flex
-                    div class=flex-shrink-0 mr-4
-                        div class=w-10 h-10 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-lg border border-slate-3002div
-                    div
-                    div
-                        h4 class=text-xl font-bold text-slate-800Plan de Analítica y Acciónh4
-                        p class=text-slate-600 text-sm mt-1Definan al menos 2 indicadores de learning analytics a recolectar. Expliquen qué decisión pedagógica tomaría el tutor si ese indicador está por debajo del umbral esperado.p
-                    div
-                div
+                <div class="flex">
+                    <div class="flex-shrink-0 mr-4">
+                        <div class="w-10 h-10 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-lg border border-slate-300">2</div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-slate-800">Plan de Analítica y Acción</h4>
+                        <p class="text-slate-600 text-sm mt-1">Definan al menos 2 indicadores de learning analytics a recolectar. Expliquen qué decisión pedagógica tomaría el tutor si ese indicador está por debajo del umbral esperado.</p>
+                    </div>
+                </div>
 
-                div class=flex
-                    div class=flex-shrink-0 mr-4
-                        div class=w-10 h-10 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-lg border border-slate-3003div
-                    div
-                    div
-                        h4 class=text-xl font-bold text-slate-800El Rol de la IAh4
-                        p class=text-slate-600 text-sm mt-1Respondan al debate institucional ¿De qué manera herramientas de IA podrían ayudar al docente a gestionar este grupo de 80 alumnos sin perder la presencia docente Definan su postura.p
-                    div
-                div
-            div
+                <div class="flex">
+                    <div class="flex-shrink-0 mr-4">
+                        <div class="w-10 h-10 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-lg border border-slate-300">3</div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-slate-800">El Rol de la IA</h4>
+                        <p class="text-slate-600 text-sm mt-1">Respondan al debate institucional: ¿De qué manera herramientas de IA podrían ayudar al docente a gestionar este grupo de 80 alumnos sin perder la "presencia docente"? Definan su postura.</p>
+                    </div>
+                </div>
+            </div>
 
-            !-- Entregable --
-            div class=mt-8 p-5 bg-white border border-slate-200 rounded-xl shadow-sm
-                h4 class=font-bold text-slate-800 mb-2Formato de Presentación (5 minutos por grupo)h4
-                ul class=list-disc pl-5 text-sm text-slate-600 space-y-1
-                    liAnálisis del problema brecha identificada + perfil.li
-                    liDiseño 1 objetivo clave, actividad de bajo ancho de banda, 1 estrategia de evaluación.li
-                    liAnalítica 1 indicador + acción pedagógica disparada.li
-                    liPostura sobre la implementación de IA (Chatbot o alternativas).li
-                ul
-            div
-        section
+            <!-- Entregable -->
+            <div class="mt-8 p-5 bg-white border border-slate-200 rounded-xl shadow-sm">
+                <h4 class="font-bold text-slate-800 mb-2">Formato de Presentación (5 minutos por grupo)</h4>
+                <ul class="list-disc pl-5 text-sm text-slate-600 space-y-1">
+                    <li>Análisis del problema: brecha identificada + perfil.</li>
+                    <li>Diseño: 1 objetivo clave, actividad de bajo ancho de banda, 1 estrategia de evaluación.</li>
+                    <li>Analítica: 1 indicador + acción pedagógica disparada.</li>
+                    <li>Postura sobre la implementación de IA (Chatbot o alternativas).</li>
+                </ul>
+            </div>
+        </section>
 
-        !-- ==================== VIEW 4 ADDIE REFERENCE ==================== --
-        section id=view-addie class=view-section p-6 lgp-10 max-w-4xl mx-auto
-            div class=mb-8
-                h2 class=text-3xl font-bold text-slate-900Marco de Trabajo ADDIEh2
-                p class=text-slate-600 mt-2Un marco sistemático para el diseño de cursos virtuales. Interactúa con las fases para recordar los pasos clave durante el rediseño del caso UAS.p
-            div
+        <!-- ==================== VIEW 4: ADDIE REFERENCE ==================== -->
+        <section id="view-addie" class="view-section p-6 lg:p-10 max-w-4xl mx-auto">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-900">Marco de Trabajo: ADDIE</h2>
+                <p class="text-slate-600 mt-2">Un marco sistemático para el diseño de cursos virtuales. Interactúa con las fases para recordar los pasos clave durante el rediseño del caso UAS.</p>
+            </div>
 
-            !-- Interactive Accordion for ADDIE --
-            div class=space-y-4 id=addie-accordion
-                !-- A --
-                div class=border border-slate-200 rounded-lg bg-white overflow-hidden
-                    button class=w-full text-left px-6 py-4 font-bold text-slate-800 bg-slate-50 hoverbg-slate-100 flex justify-between items-center addie-btn
-                        spanA - Análisisspan
-                        span class=text-slate-400 text-xl+span
-                    button
-                    div class=px-6 py-4 hidden text-slate-600 text-sm border-t border-slate-100 addie-content
-                        p¿Quién es el estudiante ¿Cuál es la brecha de aprendizaje ¿Qué restricciones tecnológicas existen Incluye análisis de necesidades, perfil del aprendiz y contexto institucional. En EaD, esta fase es crítica porque no hay posibilidad de ajuste espontáneo durante la instrucción.p
-                    div
-                div
-                !-- D1 --
-                div class=border border-slate-200 rounded-lg bg-white overflow-hidden
-                    button class=w-full text-left px-6 py-4 font-bold text-slate-800 bg-slate-50 hoverbg-slate-100 flex justify-between items-center addie-btn
-                        spanD - Diseñospan
-                        span class=text-slate-400 text-xl+span
-                    button
-                    div class=px-6 py-4 hidden text-slate-600 text-sm border-t border-slate-100 addie-content
-                        pDefinición de objetivos medibles (taxonomía de Bloom), secuenciación de contenidos, selección de estrategias didácticas y diseño de la evaluación alineada. Aquí se define la arquitectura de la experiencia de aprendizaje.p
-                    div
-                div
-                !-- D2 --
-                div class=border border-slate-200 rounded-lg bg-white overflow-hidden
-                    button class=w-full text-left px-6 py-4 font-bold text-slate-800 bg-slate-50 hoverbg-slate-100 flex justify-between items-center addie-btn
-                        spanD - Desarrollospan
-                        span class=text-slate-400 text-xl+span
-                    button
-                    div class=px-6 py-4 hidden text-slate-600 text-sm border-t border-slate-100 addie-content
-                        pProducción de materiales reales audios, lecturas, actividades interactivas, rúbricas. Configuración técnica del LMS (Moodle). Revisión con diseñadores o tutores antes del lanzamiento.p
-                    div
-                div
-                !-- I --
-                div class=border border-slate-200 rounded-lg bg-white overflow-hidden
-                    button class=w-full text-left px-6 py-4 font-bold text-slate-800 bg-slate-50 hoverbg-slate-100 flex justify-between items-center addie-btn
-                        spanI - Implementaciónspan
-                        span class=text-slate-400 text-xl+span
-                    button
-                    div class=px-6 py-4 hidden text-slate-600 text-sm border-t border-slate-100 addie-content
-                        pLanzamiento del curso, facilitación activa, comunicación con estudiantes, presencia docente, seguimiento de participación inicial y resolución de problemas técnicos emergentes.p
-                    div
-                div
-                !-- E --
-                div class=border border-slate-200 rounded-lg bg-white overflow-hidden
-                    button class=w-full text-left px-6 py-4 font-bold text-slate-800 bg-slate-50 hoverbg-slate-100 flex justify-between items-center addie-btn
-                        spanE - Evaluaciónspan
-                        span class=text-slate-400 text-xl+span
-                    button
-                    div class=px-6 py-4 hidden text-slate-600 text-sm border-t border-slate-100 addie-content
-                        pFormativa (durante el curso) y sumativa (al cierre). Uso intensivo de strongLearning Analyticsstrong y retroalimentación para medir la eficacia y revisar el diseño en iteraciones futuras.p
-                    div
-                div
-            div
+            <!-- Interactive Accordion for ADDIE -->
+            <div class="space-y-4" id="addie-accordion">
+                <!-- A -->
+                <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
+                    <button class="w-full text-left px-6 py-4 font-bold text-slate-800 bg-slate-50 hover:bg-slate-100 flex justify-between items-center addie-btn">
+                        <span>A - Análisis</span>
+                        <span class="text-slate-400 text-xl">+</span>
+                    </button>
+                    <div class="px-6 py-4 hidden text-slate-600 text-sm border-t border-slate-100 addie-content">
+                        <p>¿Quién es el estudiante? ¿Cuál es la brecha de aprendizaje? ¿Qué restricciones tecnológicas existen? Incluye análisis de necesidades, perfil del aprendiz y contexto institucional. En EaD, esta fase es crítica porque no hay posibilidad de ajuste espontáneo durante la instrucción.</p>
+                    </div>
+                </div>
+                <!-- D1 -->
+                <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
+                    <button class="w-full text-left px-6 py-4 font-bold text-slate-800 bg-slate-50 hover:bg-slate-100 flex justify-between items-center addie-btn">
+                        <span>D - Diseño</span>
+                        <span class="text-slate-400 text-xl">+</span>
+                    </button>
+                    <div class="px-6 py-4 hidden text-slate-600 text-sm border-t border-slate-100 addie-content">
+                        <p>Definición de objetivos medibles (taxonomía de Bloom), secuenciación de contenidos, selección de estrategias didácticas y diseño de la evaluación alineada. Aquí se define la "arquitectura" de la experiencia de aprendizaje.</p>
+                    </div>
+                </div>
+                <!-- D2 -->
+                <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
+                    <button class="w-full text-left px-6 py-4 font-bold text-slate-800 bg-slate-50 hover:bg-slate-100 flex justify-between items-center addie-btn">
+                        <span>D - Desarrollo</span>
+                        <span class="text-slate-400 text-xl">+</span>
+                    </button>
+                    <div class="px-6 py-4 hidden text-slate-600 text-sm border-t border-slate-100 addie-content">
+                        <p>Producción de materiales reales: audios, lecturas, actividades interactivas, rúbricas. Configuración técnica del LMS (Moodle). Revisión con diseñadores o tutores antes del lanzamiento.</p>
+                    </div>
+                </div>
+                <!-- I -->
+                <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
+                    <button class="w-full text-left px-6 py-4 font-bold text-slate-800 bg-slate-50 hover:bg-slate-100 flex justify-between items-center addie-btn">
+                        <span>I - Implementación</span>
+                        <span class="text-slate-400 text-xl">+</span>
+                    </button>
+                    <div class="px-6 py-4 hidden text-slate-600 text-sm border-t border-slate-100 addie-content">
+                        <p>Lanzamiento del curso, facilitación activa, comunicación con estudiantes, presencia docente, seguimiento de participación inicial y resolución de problemas técnicos emergentes.</p>
+                    </div>
+                </div>
+                <!-- E -->
+                <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
+                    <button class="w-full text-left px-6 py-4 font-bold text-slate-800 bg-slate-50 hover:bg-slate-100 flex justify-between items-center addie-btn">
+                        <span>E - Evaluación</span>
+                        <span class="text-slate-400 text-xl">+</span>
+                    </button>
+                    <div class="px-6 py-4 hidden text-slate-600 text-sm border-t border-slate-100 addie-content">
+                        <p>Formativa (durante el curso) y sumativa (al cierre). Uso intensivo de <strong>Learning Analytics</strong> y retroalimentación para medir la eficacia y revisar el diseño en iteraciones futuras.</p>
+                    </div>
+                </div>
+            </div>
             
-            div class=mt-8 text-center text-sm text-slate-500 italic
-                El modelo ADDIE no es lineal en la práctica cada fase retroalimenta a las anteriores.
-            div
-        section
+            <div class="mt-8 text-center text-sm text-slate-500 italic">
+                "El modelo ADDIE no es lineal en la práctica: cada fase retroalimenta a las anteriores."
+            </div>
+        </section>
 
-    main
+    </main>
 
-    !-- App Logic --
-    script
-         --- 1. Navegación SPA ---
+    <!-- App Logic -->
+    <script>
+        // --- 1. Navegación SPA ---
         const navButtons = document.querySelectorAll('.nav-item');
         const mobileSelect = document.getElementById('mobile-nav');
         const views = document.querySelectorAll('.view-section');
@@ -440,13 +440,13 @@ body class=flex h-screen overflow-hidden antialiased
         let chartsInitialized = false;
 
         function switchView(targetId) {
-             Ocultar todas las vistas
-            views.forEach(view = view.classList.remove('active'));
-             Mostrar la vista objetivo
+            // Ocultar todas las vistas
+            views.forEach(view => view.classList.remove('active'));
+            // Mostrar la vista objetivo
             document.getElementById(targetId).classList.add('active');
 
-             Actualizar botones UI
-            navButtons.forEach(btn = {
+            // Actualizar botones UI
+            navButtons.forEach(btn => {
                 if(btn.dataset.target === targetId) {
                     btn.classList.add('active');
                 } else {
@@ -455,31 +455,31 @@ body class=flex h-screen overflow-hidden antialiased
             });
             mobileSelect.value = targetId;
 
-             Inicializar gráficos solo cuando la vista de dashboard es visible para evitar problemas de renderizado en Canvas ocultos
+            // Inicializar gráficos solo cuando la vista de dashboard es visible para evitar problemas de renderizado en Canvas ocultos
             if (targetId === 'view-dashboard' && !chartsInitialized) {
                 initCharts();
                 chartsInitialized = true;
             }
         }
 
-         Event Listeners Desktop Nav
-        navButtons.forEach(btn = {
-            btn.addEventListener('click', (e) = {
+        // Event Listeners Desktop Nav
+        navButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
                 switchView(e.target.dataset.target);
             });
         });
 
-         Event Listener Mobile Nav
-        mobileSelect.addEventListener('change', (e) = {
+        // Event Listener Mobile Nav
+        mobileSelect.addEventListener('change', (e) => {
             switchView(e.target.value);
         });
 
-         --- 2. Acordeón ADDIE ---
+        // --- 2. Acordeón ADDIE ---
         const addieBtns = document.querySelectorAll('.addie-btn');
-        addieBtns.forEach(btn = {
+        addieBtns.forEach(btn => {
             btn.addEventListener('click', function() {
                 const content = this.nextElementSibling;
-                const icon = this.querySelector('spanlast-child');
+                const icon = this.querySelector('span:last-child');
                 
                 if (content.classList.contains('hidden')) {
                     content.classList.remove('hidden');
@@ -493,97 +493,97 @@ body class=flex h-screen overflow-hidden antialiased
             });
         });
 
-         --- 3. Inicialización de Gráficos (Chart.js) ---
-         Configuración general
-        Chart.defaults.font.family = 'Inter', sans-serif;
-        Chart.defaults.color = '#64748B';  text-slate-500
+        // --- 3. Inicialización de Gráficos (Chart.js) ---
+        // Configuración general
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = '#64748B'; // text-slate-500
 
         function initCharts() {
-             Datos Estáticos (Almacenados localmente)
+            // Datos Estáticos (Almacenados localmente)
             const dataLogins = {
-                labels ['Semana 1', 'Semana 2', 'Semana 3 (Foro)', 'Semana 4'],
-                datasets [{
-                    label '% de Estudiantes que inician sesión',
-                    data [95, 80, 45, 30],
-                    borderColor '#334155',  slate-700
-                    backgroundColor 'rgba(51, 65, 85, 0.1)',
-                    borderWidth 2,
-                    pointBackgroundColor '#F59E0B',  amber-500
-                    pointBorderColor '#fff',
-                    pointHoverBackgroundColor '#fff',
-                    pointHoverBorderColor '#F59E0B',
-                    pointRadius 5,
-                    pointHoverRadius 7,
-                    fill true,
-                    tension 0.3
+                labels: ['Semana 1', 'Semana 2', 'Semana 3 (Foro)', 'Semana 4'],
+                datasets: [{
+                    label: '% de Estudiantes que inician sesión',
+                    data: [95, 80, 45, 30],
+                    borderColor: '#334155', // slate-700
+                    backgroundColor: 'rgba(51, 65, 85, 0.1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#F59E0B', // amber-500
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#F59E0B',
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    fill: true,
+                    tension: 0.3
                 }]
             };
 
             const dataVideo = {
-                labels ['Min 0', 'Min 5', 'Min 15', 'Min 30', 'Min 45'],
-                datasets [{
-                    label '% Retención de Audiencia',
-                    data [100, 12, 8, 4, 2],
-                    backgroundColor 'rgba(239, 68, 68, 0.2)',  red-500 light
-                    borderColor '#EF4444',
-                    borderWidth 2,
-                    fill true,
-                    tension 0.4
+                labels: ['Min 0', 'Min 5', 'Min 15', 'Min 30', 'Min 45'],
+                datasets: [{
+                    label: '% Retención de Audiencia',
+                    data: [100, 12, 8, 4, 2],
+                    backgroundColor: 'rgba(239, 68, 68, 0.2)', // red-500 light
+                    borderColor: '#EF4444',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
                 }]
             };
 
-             Configuración común
+            // Configuración común
             const commonOptions = {
-                responsive true,
-                maintainAspectRatio false,  CRÍTICO Permite que el CSS de .chart-container controle el tamaño
-                plugins {
-                    legend {
-                        position 'top',
-                        labels { boxWidth 12, usePointStyle true }
+                responsive: true,
+                maintainAspectRatio: false, // CRÍTICO: Permite que el CSS de .chart-container controle el tamaño
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { boxWidth: 12, usePointStyle: true }
                     },
-                    tooltip {
-                        backgroundColor 'rgba(15, 23, 42, 0.9)',
-                        titleFont { size 13 },
-                        bodyFont { size 14 },
-                        padding 10,
-                        cornerRadius 8,
-                        displayColors false
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        titleFont: { size: 13 },
+                        bodyFont: { size: 14 },
+                        padding: 10,
+                        cornerRadius: 8,
+                        displayColors: false
                     }
                 },
-                scales {
-                    y {
-                        beginAtZero true,
-                        max 100,
-                        grid { color '#F1F5F9' },
-                        ticks { callback function(value) { return value + '%'; } }
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: '#F1F5F9' },
+                        ticks: { callback: function(value) { return value + '%'; } }
                     },
-                    x {
-                        grid { display false }
+                    x: {
+                        grid: { display: false }
                     }
                 }
             };
 
-             Renderizar Gráfico de Logins
+            // Renderizar Gráfico de Logins
             const ctxLogins = document.getElementById('loginsChart').getContext('2d');
             new Chart(ctxLogins, {
-                type 'line',
-                data dataLogins,
-                options commonOptions
+                type: 'line',
+                data: dataLogins,
+                options: commonOptions
             });
 
-             Renderizar Gráfico de Video (Sobrescribiendo opciones específicas si se necesita)
+            // Renderizar Gráfico de Video (Sobrescribiendo opciones específicas si se necesita)
             const ctxVideo = document.getElementById('videoChart').getContext('2d');
             new Chart(ctxVideo, {
-                type 'line',
-                data dataVideo,
-                options {
+                type: 'line',
+                data: dataVideo,
+                options: {
                     ...commonOptions,
-                    plugins {
+                    plugins: {
                         ...commonOptions.plugins,
-                        tooltip {
+                        tooltip: {
                             ...commonOptions.plugins.tooltip,
-                            callbacks {
-                                label function(context) {
+                            callbacks: {
+                                label: function(context) {
                                     return context.parsed.y + '% siguen viendo';
                                 }
                             }
@@ -593,12 +593,12 @@ body class=flex h-screen overflow-hidden antialiased
             });
         }
 
-         Inicializar la vista por defecto en carga
-        document.addEventListener('DOMContentLoaded', () = {
-             Esto asegura que la clase 'active' de CSS maneje la visibilidad y se rendericen los gráficos iniciales
+        // Inicializar la vista por defecto en carga
+        document.addEventListener('DOMContentLoaded', () => {
+            // Esto asegura que la clase 'active' de CSS maneje la visibilidad y se rendericen los gráficos iniciales
             switchView('view-dashboard');
         });
 
-    script
-body
-html
+    </script>
+</body>
+</html>
